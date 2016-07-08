@@ -6,9 +6,11 @@ package com.peter.db;
 
 import com.peter.bean.Bihua;
 
+import java.io.FileWriter;
+import java.io.IOException;
 import java.sql.*;
 
-public class SQLiteJDBC {
+public class BihuaDbOperate {
 
     public static final String HANZI = "HANZI";
     public static final String ENCODE = "ENCODE";
@@ -18,8 +20,45 @@ public class SQLiteJDBC {
     public static final String POINTS = "POINTS";
     public Connection connection;
     public Statement statement;
+    public FileWriter mFileWriter;
 
-    public SQLiteJDBC(String dbName) {
+    public  void appendFile( String content) {
+        try {
+            //打开一个写文件器，构造函数中的第二个参数true表示以追加形式写文件
+            mFileWriter.write(content);
+            mFileWriter.write("\n");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void closeResource(){
+        if(this.mFileWriter!=null){
+            try {
+                this.mFileWriter.flush();
+                this.mFileWriter.close();
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+
+        }
+        if(this.statement!=null){
+            try {
+                this.statement.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        if(this.connection!=null){
+            try {
+                this.connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public BihuaDbOperate(String dbName,String fileName) {
 
         try {
             Class.forName("org.sqlite.JDBC");
@@ -27,9 +66,12 @@ public class SQLiteJDBC {
             connection.setAutoCommit(false);
             statement = connection.createStatement();
             createTable();
+            mFileWriter = new FileWriter(fileName,true);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         } catch (SQLException e) {
+            e.printStackTrace();
+        }catch (IOException e){
             e.printStackTrace();
         }
     }
@@ -60,6 +102,7 @@ public class SQLiteJDBC {
     public void insert(Bihua bihua) {
         String sql = "INSERT INTO " + HANZI + "(HANZI," + ENCODE + "," + BIHUASTEP + "," + PINYIN + "," + POINTS + ") values ('" + bihua.hanzi + "','" + bihua.encode + "','" + bihua.bihuaStep + "','" + bihua.pinyin + "','" + bihua.points + "');";
         System.out.println(sql);
+        appendFile(sql);
         try {
             statement.executeUpdate(sql);
             connection.commit();

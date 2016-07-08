@@ -4,17 +4,9 @@ package com.peter;
  * Created by jiangbin on 16/7/7.
  */
 
-import com.peter.db.SQLiteJDBC;
-
 import java.io.File;
 import java.io.FilenameFilter;
 import java.sql.*;
-
-
-import com.peter.db.SQLiteJDBC;
-
-import java.sql.*;
-import java.util.Arrays;
 
 /**
  * Created by jiangbin on 16/7/7.
@@ -27,11 +19,13 @@ public class MergeAnimationDb {
     public Connection toConnection;
     public Statement toStatement;
 
+    public String fromDbName;
+
     public static void main(String[] args) {
         File file = new File(".");
-       File[] files = file.listFiles(new FilenameFilter() {
+        File[] files = file.listFiles(new FilenameFilter() {
             public boolean accept(File dir, String name) {
-                return name.contains("anmation");
+                return name.contains("animation");
             }
         });
         for(int i =1;i<files.length;i++){
@@ -40,8 +34,21 @@ public class MergeAnimationDb {
 //        System.out.println(Arrays.toString(file.list()));
     }
 
+    public static void merge(){
+        File file = new File(".");
+        File[] files = file.listFiles(new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                return name.contains("animation")&&name.endsWith(".db");
+            }
+        });
+        for(int i =1;i<files.length;i++){
+            new MergeAnimationDb(files[i].getName(),files[0].getName()).copyLineByLine();
+        }
+        files[0].renameTo(new File("animation.db"));
+    }
     public MergeAnimationDb(String fromDb, String toDb) {
         try {
+            this.fromDbName = fromDb;
             Class.forName("org.sqlite.JDBC");
             fromConnection = DriverManager.getConnection("jdbc:sqlite:" + fromDb);
             fromConnection.setAutoCommit(false);
@@ -66,7 +73,7 @@ public class MergeAnimationDb {
 
         while (true) {
             try {
-                String sql = "select * from AIMATION limit 100 offset " + offset + ";";
+                String sql = "select * from ANIMATION limit 100 offset " + offset + ";";
                 System.out.println(sql);
                 ResultSet rs = fromStatement.executeQuery(sql);
                 boolean find = false;
@@ -92,11 +99,12 @@ public class MergeAnimationDb {
         } catch (Exception e) {
         }
 
+        new File(fromDbName).delete();
         System.out.println("exit " + (System.currentTimeMillis() - beginTime));
     }
 
     public void insert(String hanzi, String content, String encode) {
-        String sql = "INSERT INTO AIMATION(HANZI,ANIMATION,ENCODE) values ('" + hanzi + "','" + content + "','" + encode + "');";
+        String sql = "INSERT INTO ANIMATION(HANZI,ANIMATION,ENCODE) values ('" + hanzi + "','" + content + "','" + encode + "');";
         System.out.println(sql);
 
         try {
