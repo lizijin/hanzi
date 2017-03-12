@@ -44,31 +44,19 @@ public class Crawler {
         }
         System.out.println("清理完毕");
         CountDownLatch countDownLatch = new CountDownLatch(6);
-//        CrawlerThread thread4 = new CrawlerThread('\u4E00', '\u4fff', 4,countDownLatch);
-//        thread4.setName("thread4");
-//        CrawlerThread thread5 = new CrawlerThread('\u5000', '\u5fff', 5,countDownLatch);
-//        thread5.setName("thread5");
-//        CrawlerThread thread6 = new CrawlerThread('\u6000', '\u6fff', 6,countDownLatch);
-//        thread6.setName("thread6");
-//        CrawlerThread thread7 = new CrawlerThread('\u7000', '\u7fff', 7,countDownLatch);
-//        thread7.setName("thread7");
-//        CrawlerThread thread8 = new CrawlerThread('\u8000', '\u8fff', 8,countDownLatch);
-//        thread8.setName("thread8");
-//        CrawlerThread thread9 = new CrawlerThread('\u9000', '\u9FA5', 9,countDownLatch);
-//        thread9.setName("thread9");
-
-        CrawlerThread thread4 = new CrawlerThread('\u4E00', '\u4E0f', 4,countDownLatch);
+        CrawlerThread thread4 = new CrawlerThread('\u4E00', '\u4fff', 4,countDownLatch);
         thread4.setName("thread4");
-        CrawlerThread thread5 = new CrawlerThread('\u5000', '\u500f', 5,countDownLatch);
+        CrawlerThread thread5 = new CrawlerThread('\u5000', '\u5fff', 5,countDownLatch);
         thread5.setName("thread5");
-        CrawlerThread thread6 = new CrawlerThread('\u6000', '\u600f', 6,countDownLatch);
+        CrawlerThread thread6 = new CrawlerThread('\u6000', '\u6fff', 6,countDownLatch);
         thread6.setName("thread6");
-        CrawlerThread thread7 = new CrawlerThread('\u7000', '\u700f', 7,countDownLatch);
+        CrawlerThread thread7 = new CrawlerThread('\u7000', '\u7fff', 7,countDownLatch);
         thread7.setName("thread7");
-        CrawlerThread thread8 = new CrawlerThread('\u8000', '\u800f', 8,countDownLatch);
+        CrawlerThread thread8 = new CrawlerThread('\u8000', '\u8fff', 8,countDownLatch);
         thread8.setName("thread8");
-        CrawlerThread thread9 = new CrawlerThread('\u9000', '\u900f', 9,countDownLatch);
+        CrawlerThread thread9 = new CrawlerThread('\u9000', '\u9FA5', 9,countDownLatch);
         thread9.setName("thread9");
+
         thread4.start();
         thread5.start();
         thread6.start();
